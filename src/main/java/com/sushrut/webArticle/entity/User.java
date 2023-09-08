@@ -1,13 +1,37 @@
 package com.sushrut.webArticle.entity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="user_details")
 public class User {
@@ -18,65 +42,36 @@ public class User {
 	@Column(name="id")
 	private String id;
 	
+	@Size(min=2, max=50, message = "First name must be between 2 to 50 characters" )
+	@NotBlank
 	@Column(name="first_name")
 	private String first_name;
 	
+	@Size(max=50)
+	@NotBlank
 	@Column(name="last_name")
 	private String last_name;
 	
-	@Column(name="role")
-	private String role;
-	
+	@Email
+	@Size(max=50)
+	@NotBlank(message="Email Id can't be blank, enter a valid email")
 	@Column(name="email")
 	private String email;
 	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getFirst_name() {
-		return first_name;
-	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
-	}
-	public String getLast_name() {
-		return last_name;
-	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
-	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	@Size(min=4, max=10, message = "Length should be between 4 to 10 characters")
+	@NotBlank
+	private String password;
 	
-	public User(String first_name, String last_name, String role, String email) {
-		super();
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.role = role;
-		this.email = email;
-	}
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER , mappedBy = "user")
+	private List<News> news = new ArrayList<>(); 
 	
-	public User() {
-		
-	}
+	@ManyToMany
+	@JoinTable(name = "user_role",
+	joinColumns = {@JoinColumn(name="user_id")},
+	inverseJoinColumns = {@JoinColumn(name="role_id")})
+	private Set<Role> roles = new HashSet<>(); 
 	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", first_name=" + first_name + ", last_name=" + last_name + ", role=" + role
-				+ ", email=" + email + "]";
-	}
+	
 	
 }

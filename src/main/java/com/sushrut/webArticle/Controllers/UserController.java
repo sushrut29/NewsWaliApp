@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sushrut.webArticle.Services.UserService;
 import com.sushrut.webArticle.entity.User;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -22,7 +24,7 @@ public class UserController {
 	//create user
 	
 	@PostMapping("/")
-	public User createUser(@RequestBody User user) {
+	public User createUser(@Valid @RequestBody User user) {
 		User u = userService.createUser(user);
 		return u;
 	}
