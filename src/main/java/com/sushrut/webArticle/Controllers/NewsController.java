@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sushrut.webArticle.Services.NewsService;
 import com.sushrut.webArticle.entity.News;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/news")
+@RequestMapping("/api")
 public class NewsController {
 	
 	@Autowired
@@ -25,15 +28,16 @@ public class NewsController {
 	
 	// create News
 	
-	@PostMapping("/")
-	public News createNews(@RequestBody News news) {
-		News n = newsService.createNews(news);
-		return n;
+	@PostMapping("/user/{userId}/news")
+	public ResponseEntity<News> createNews(@Valid @RequestBody News news, @PathVariable String userId) {
+		
+		News n = newsService.createNews(news, userId);
+		return new ResponseEntity<News>(n, HttpStatus.CREATED);
 	}
 	
 	//get all news
 	
-	@GetMapping("/")
+	@GetMapping("/news")
 	public List<News> getAllNews(){
 		List<News> news = newsService.getAllNews();
 		return news;
@@ -65,6 +69,14 @@ public class NewsController {
 		}
 		
 			
+	}
+	
+	@GetMapping("/user/{userId}/news")
+	public ResponseEntity<List<News>> getNewsByUser(@PathVariable String userId){
+		
+		List<News> news= newsService.getNewsByUser(userId);
+		
+		return new ResponseEntity<>(news, HttpStatus.OK);
 	}
 	
 }
