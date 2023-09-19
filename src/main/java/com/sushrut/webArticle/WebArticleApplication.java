@@ -8,9 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.sushrut.webArticle.Repositories.RoleRepository;
+import com.sushrut.webArticle.configs.AppConstants;
 import com.sushrut.webArticle.entity.Role;
 
-import configs.AppConstants;
 
 @SpringBootApplication
 public class WebArticleApplication implements CommandLineRunner {
