@@ -1,8 +1,10 @@
 package com.sushrut.webArticle.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sushrut.webArticle.Exception.ResourceNotFoundException;
@@ -15,7 +17,11 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+	
 	public User createUser(User u) {
+	//	u.setPassword(passwordEncoder.encode(u.getPassword()));
 		return userRepository.save(u);
 	}
 	
@@ -43,6 +49,16 @@ public class UserService {
 	public void deleteUser(String id) {
 		User u = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 		userRepository.delete(u);
+	}
+
+	public Optional<User> getUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.findByEmail(email);
+	}
+
+	public boolean existsByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.existsByEmail(email);
 	}
 
 }

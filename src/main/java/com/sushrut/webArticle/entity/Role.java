@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,6 +40,7 @@ public class Role {
 	private String name;
 	
 	@ManyToMany(fetch = FetchType.EAGER , mappedBy = "roles")
+	@JsonBackReference
 	private List<User> users = new ArrayList<>();
 	
 
